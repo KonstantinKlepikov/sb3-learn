@@ -11,6 +11,9 @@ AutoROM.accept-rom-license==0.5.5
 backcall==0.2.0
 beautifulsoup4==4.11.2
 bleach==6.0.0
+Box2D==2.3.2
+Box2D-kengz==2.3.3
+box2d-py==2.3.5
 cachetools==5.3.0
 certifi==2022.12.7
 cffi==1.15.1
@@ -20,6 +23,7 @@ cloudpickle==2.2.1
 comm==0.1.2
 contourpy==1.0.7
 cycler==0.11.0
+Cython==0.29.33
 debugpy==1.6.6
 decorator==5.1.1
 defusedxml==0.7.1
@@ -33,6 +37,7 @@ google-auth-oauthlib==0.4.6
 grpcio==1.51.3
 gym==0.21.0
 idna==3.4
+imageio==2.26.0
 importlib-metadata==4.13.0
 importlib-resources==5.12.0
 ipykernel==6.21.3
@@ -59,6 +64,7 @@ kiwisolver==1.4.4
 libtorrent==2.0.7
 lockfile==0.12.2
 lxml==4.9.2
+lz4==4.3.2
 Markdown==3.4.1
 markdown-it-py==2.2.0
 MarkupSafe==2.1.2
@@ -96,6 +102,7 @@ ptyprocess==0.7.0
 pure-eval==0.2.2
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
+pybullet==3.2.5
 pycparser==2.21
 pyglet==1.5.27
 Pygments==2.14.0
@@ -112,6 +119,8 @@ rfc3339-validator==0.1.4
 rfc3986-validator==0.1.1
 rich==13.3.2
 rsa==4.9
+sb3-contrib==1.7.0
+scipy==1.10.1
 Send2Trash==1.8.0
 six==1.16.0
 sniffio==1.3.0
