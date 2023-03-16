@@ -84,6 +84,70 @@ More algorithms (like QR-DQN or TQC) are implemented in our [contrib repo](https
   - `VecMonitor` - используется для записи вознаграждения за эпизод, продолжительности, времени и других данных.
   - `VecExtractDictObs` - извлечение наблюдений в виде словаря
 
+## [Policy networks](https://stable-baselines3.readthedocs.io/en/master/guide/custom_policy.html)
+
+Stable Baselines3 предоставляет сети политик для изображений (CnnPolicies), другие типы входных функций (MlpPolicies) и мультимодальных данных (MultiInputPolicies). Сети SB3 разделены на две основные части.
+
+![sb3 networks](2023-03-16-01-47-08.png)
+
+Архитектура сети по умолчанию, используемая SB3, зависит от алгоритма и пространства наблюдения. Вы можете визуализировать архитектуру через `model.policy`. Один из способов настроить архитектуру сети политик — передать аргументы при создании модели с помощью `policy_kwargs`.
+
+```python
+import gym
+import torch as th
+from stable_baselines3 import PPO
+
+# Custom actor (pi) and value function (vf) networks
+# of two layers of size 32 each with Relu activation function
+# Note: an extra linear layer will be added on top of the pi and the vf nets, respectively
+policy_kwargs = dict(activation_fn=th.nn.ReLU,
+                     net_arch=dict(pi=[32, 32], vf=[32, 32]))
+# Create the agent
+model = PPO("MlpPolicy", "CartPole-v1", policy_kwargs=policy_kwargs, verbose=1)
+# Retrieve the environment
+env = model.get_env()
+# Train the agent
+model.learn(total_timesteps=20_000)
+# Save the agent
+model.save("ppo_cartpole")
+
+del model
+# the policy_kwargs are automatically loaded
+model = PPO.load("ppo_cartpole", env=env)
+```
+
+Если вы хотите иметь настраиваемый экстрактор функций (например, пользовательский CNN при использовании изображений), вы можете определить класс, производный от `BaseFeaturesExtractor`, а затем [передать его модели при обучении](https://stable-baselines3.readthedocs.io/en/master/guide/custom_policy.html#custom-feature-extractor).
+
+Stable Baselines3 поддерживает обработку множественных входных данных с помощью пространства `Dict` Gym. Это можно сделать с помощью `MultiInputPolicy`, который по умолчанию использует экстрактор функций `CombinedExtractor` для преобразования нескольких входных данных в один вектор, обрабатываемый `net_arch` сетью. [Подробнее](https://stable-baselines3.readthedocs.io/en/master/guide/custom_policy.html#multiple-inputs-and-dictionary-observations).
+
+Подробнее о реализации сетей для алгоритмов [с политиками](https://stable-baselines3.readthedocs.io/en/master/guide/custom_policy.html#on-policy-algorithms) и [вне политик](https://stable-baselines3.readthedocs.io/en/master/guide/custom_policy.html#on-policy-algorithms).
+
+## [Using Custom Environments](https://stable-baselines3.readthedocs.io/en/master/guide/custom_env.html)
+
+## Колбеки и интеграции
+
+- [Callbacks](https://stable-baselines3.readthedocs.io/en/master/guide/callbacks.html)
+- [TensorBoard](https://stable-baselines3.readthedocs.io/en/master/guide/tensorboard.html)
+- [интеграции со сторонними сервисами](https://stable-baselines3.readthedocs.io/en/master/guide/integrations.html)
+- [Dealing with NaNs and infs](https://stable-baselines3.readthedocs.io/en/master/guide/checking_nan.html)
+- [Exporting model](https://stable-baselines3.readthedocs.io/en/master/guide/export.html)
+
+## Дополнительные фичи
+
+- [RL Baselines3 Zoo](https://stable-baselines3.readthedocs.io/en/master/guide/rl_zoo.html) предоставляет сценарии для обучения, оценки агентов, настройки гиперпараметров, отображения результатов и записи видео. Кроме того, включает в себя набор настроенных гиперпараметров для распространенных сред и алгоритмов RL, а также агентов, обученных ПО этим настройкам.
+- [SB3 Contrib](https://stable-baselines3.readthedocs.io/en/master/guide/sb3_contrib.html) реализует передовые алгоритмы не влезая в ядро баблиотеки.
+  - Augmented Random Search (ARS)
+  - Quantile Regression DQN (QR-DQN)
+  - PPO with invalid action masking (Maskable PPO)
+  - PPO with recurrent policy (RecurrentPPO aka PPO LSTM)
+  - Truncated Quantile Critics (TQC)
+  - Trust Region Policy Optimization (TRPO)
+- [Imitation Learning](https://stable-baselines3.readthedocs.io/en/master/guide/imitation.html)
+  - Behavioral Cloning
+  - DAgger with synthetic examples
+  - Adversarial Inverse Reinforcement Learning (AIRL)
+  - Generative Adversarial Imitation Learning (GAIL)
+  - Deep RL from Human Preferences (DRLHP)
 Смотри еще:
 
 - [документация](https://stable-baselines3.readthedocs.io/en/master/guide/install.html)
